@@ -2,9 +2,9 @@
 
 import React from 'react'
 import {Route, IndexRoute} from 'react-router'
-import Hello from '../hello/Hello'
+import Poll from '../poll/Poll'
 
 export default
   <Route path="/">
-    <IndexRoute component={Hello}/>
+    <IndexRoute component={Poll}/>
   </Route>
