@@ -10,7 +10,7 @@ import fetch from 'isomorphic-fetch'
 export async function get(api) {
   let response
   try {
-    response = await fetch(api, {method: 'GET', mode: 'cors'})
+    response = await fetch(`${process.env.API_URL}${api}`, {method: 'GET', mode: 'cors'})
     response = await response.json()
   } catch(err) {
     response = new Promise()
@@ -28,9 +28,10 @@ export async function get(api) {
  * @return {promise} Promise containing the fetched data
  */
 export async function post(api, payload) {
+  console.log(process.env.REACT_APP_API_DEV)
   let response
   try {
-    response = await fetch(api, {method: 'POST', mode: 'cors', body: JSON.stringify(payload)})
+    response = await fetch(`${process.env.API_URL}${api}`, {method: 'POST', mode: 'cors', body: JSON.stringify(payload)})
     response = await response.json()
   } catch(err) {
     response = new Promise()
