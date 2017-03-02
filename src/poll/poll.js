@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {times} from 'lodash'
+import {times} from 'lodash'
 import {get, post} from '../helpers.js'
 
 class Poll extends Component{
@@ -22,10 +22,10 @@ class Poll extends Component{
           <label htmlFor="title">
             Title
           </label>
-          <input id="title" type="text" onChange={(e)=> this.handleChange(e)} />
+          <input id="title" type="text" required onChange={(e)=> this.handleChange(e)} />
           <h2>Choices</h2>
           {this.renderChoiceInputs()}
-          <input type="submit" />
+          <input type="submit" value="Create Poll" />
         </form>
       </div>
     )
@@ -33,8 +33,10 @@ class Poll extends Component{
   handleChange(e){
     let newState = {}
     if(e.target.id.indexOf('choice') === 0){
+      newState.choices = this.state.choices.slice()
       const index = e.target.id.slice(-1)
       newState.choices[index] = e.target.value
+      this.setState(newState)
       return
     }
     newState[e.target.id] = e.target.value
@@ -44,13 +46,7 @@ class Poll extends Component{
     e.preventDefault()
     const payload = {
       title: this.state.title,
-      choices: [
-        'Java',
-        'PHP',
-        'Ruby',
-        'JavaScript',
-        'Python',
-      ], 
+      choices: this.state.choices.filter((val)=>val ? true : false), 
     }
     post('http://localhost:1337/poll/', payload)
       .then((response)=> console.log(response))
@@ -60,7 +56,15 @@ class Poll extends Component{
       return result
     }
     let result = times(this.state.choices.length, (n)=> {
-      return <input type="text" key={n} id={`choice-${n}`} value={this.state.choices[n]} onChange={(e)=> this.handleChange(e)} />
+      return (
+        <input 
+          type="text" 
+          key={n} 
+          id={`choice-${n}`} 
+          value={this.state.choices[n]} 
+          onChange={(e)=> this.handleChange(e)} 
+        />
+          )
     })
     return result
   }
