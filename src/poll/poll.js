@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {times} from 'lodash'
-import {get, post} from '../helpers.js'
+import {post} from '../helpers.js'
 
 const STATUS_IDLE = ''
 const STATUS_CREATING = 'Creating...' 
@@ -19,10 +19,6 @@ class Poll extends Component{
     }
     return Object.assign({}, defaultState, override)
   }
-  componentWillMount(){
-    get('http://localhost:1337/poll/')
-      .then((response)=> console.log(response))
-  }
   render(){
     return(
       <div>
@@ -37,7 +33,7 @@ class Poll extends Component{
             id="title" 
             type="text"
             value={this.state.title} 
-            onChange={(e)=> this.handleChange(e)}
+            onChange={(e)=> this.handleChange(e, e.target.id)}
             ref={(input)=> this.refTitle = input}
           />
           <label>Choices</label>
@@ -51,19 +47,24 @@ class Poll extends Component{
       </div>
     )
   }
-  handleChange(e){
-    let newState = {
-      status: '',
-    }
-    if(e.target.id.indexOf('choice') === 0){
-      newState.choices = this.state.choices.slice()
-      const index = e.target.id.slice(-1)
-      newState.choices[index] = e.target.value
-      this.setState(newState)
+  handleChange(e, id){
+    if(id === 'title'){
+      this.setState({
+        status: '',
+        title: e.target.value,
+      })
       return
     }
-    newState[e.target.id] = e.target.value
-    this.setState(newState)
+    if(id.indexOf('choice') === 0){
+      const index = id.slice(-1)
+      const choices = this.state.choices.slice()
+      choices[index] = e.target.value
+      this.setState({
+        status: '',
+        choices: choices,
+      })
+      return
+    }
   }
   handleSubmit(e) {
     e.preventDefault()
@@ -72,12 +73,11 @@ class Poll extends Component{
       title: this.state.title,
       choices: this.state.choices.filter((val)=>val ? true : false), 
     }
-    post('http://localhost:1337/poll/', payload)
+    post('poll/', payload)
       .then((response)=> {
         this.setState(this.defaultState({status: STATUS_SUCCESS}))
         this.refTitle.focus()
-        console.log(response)
-      }, ()=> {
+      }, (err)=> {
         this.setState({status: STATUS_FAIL})
       })
   }
@@ -96,7 +96,7 @@ class Poll extends Component{
           key={n} 
           id={id} 
           value={this.state.choices[n]} 
-          onChange={(e)=> this.handleChange(e)} 
+          onChange={(e)=> this.handleChange(e, id)} 
         />
       )
     })
