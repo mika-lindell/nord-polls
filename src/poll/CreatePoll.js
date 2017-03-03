@@ -6,7 +6,6 @@ import {post} from '../helpers.js'
 const STATUS_IDLE = ''
 const STATUS_CREATING = 'Creating...' 
 const STATUS_SUCCESS = 'Your poll was created successfully'
-const STATUS_URL = 'VIEW YOUR NEW POLL!'
 const STATUS_FAIL = 'We failed to create your poll :(' 
 
 class CreatePoll extends Component{
@@ -52,7 +51,7 @@ class CreatePoll extends Component{
               {this.state.status}
               <br />
               {this.state.status === STATUS_SUCCESS && 
-                <Link to={`/poll/${this.state.createdPoll.id}`}>{STATUS_URL}</Link>
+                <Link to={`/poll/${this.state.createdPoll.id}/vote`}>View Poll</Link>
               }
             </p>
         </form>

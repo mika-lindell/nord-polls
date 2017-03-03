@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router'
 import {get, post} from '../helpers.js'
 
 const STATUS_IDLE = ''
@@ -47,6 +48,7 @@ class VotePoll extends Component{
             disabled={this.disableVoting()}
           />
           <p>{this.state.status}</p>
+          <Link to={`/poll/${this.state.poll.id}/results`}>View results</Link>
         </form>
       </div>
     )
