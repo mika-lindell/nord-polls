@@ -10,14 +10,31 @@ class Poll extends Component{
   componentWillMount() {
     get(`poll/${this.props.params.id}`).then((response)=> {
       this.setState({
-        poll: Object.assign({}, response),
+        poll: Object.assign({}, response.data),
       })
     })
   }
   render() {
+    if(!this.state.poll.choices) return null
     return(
       <div>
-        ViewPoll
+        <form>
+          <h1>{this.state.poll.title}</h1>
+          {this.state.poll.choices.map((choice, i)=> {
+            return (
+              <p key={i}>
+                <input 
+                  name="choice"
+                  type="radio" 
+                  id={choice.id} 
+                  value={choice.id} 
+                /> 
+                <label htmlFor={choice.id}>{choice.label}</label>
+              </p>
+            )
+          })}
+          <input type="submit" value="Vote" />
+        </form>
       </div>
     )
   }
