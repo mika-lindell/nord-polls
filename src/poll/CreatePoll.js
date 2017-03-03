@@ -5,6 +5,7 @@ import {post} from '../helpers.js'
 const STATUS_IDLE = ''
 const STATUS_CREATING = 'Creating...' 
 const STATUS_SUCCESS = 'Your poll was created successfully'
+const STATUS_URL = 'View it at'
 const STATUS_FAIL = 'We failed to create your poll :(' 
 
 class CreatePoll extends Component{
@@ -15,6 +16,7 @@ class CreatePoll extends Component{
     const defaultState = {
       title: '',
       choices: ['', '', '', ''],
+      createdPoll: null,
       status: STATUS_IDLE,
     }
     return Object.assign({}, defaultState, override)
@@ -23,6 +25,10 @@ class CreatePoll extends Component{
     document.title = 'Create Poll'
   }
   render(){
+    let pollUrl = ''
+    if(this.state.createdPoll !== null) {
+      pollUrl = `${process.env.APP_BASE_URL}poll/${this.state.createdPoll.id}`
+    }
     return(
       <div>
         <h1>Create new poll</h1>
@@ -45,7 +51,14 @@ class CreatePoll extends Component{
             type="submit" 
             value="Create Poll" 
             disabled={this.disableSubmit()} />
-            <span>{this.state.status}</span>
+            <p>
+              {this.state.status}
+              <br />
+              {this.state.status === STATUS_SUCCESS && `${STATUS_URL} ` }
+              {this.state.status === STATUS_SUCCESS && 
+                <a href={pollUrl}>{pollUrl}</a>
+              }
+            </p>
         </form>
       </div>
     )
@@ -54,6 +67,7 @@ class CreatePoll extends Component{
     if(id === 'title'){
       this.setState({
         status: '',
+        createdPoll: null,
         title: e.target.value,
       })
       return
@@ -77,8 +91,11 @@ class CreatePoll extends Component{
       choices: this.state.choices.filter((val)=>val ? true : false), 
     }
     post('poll/', payload)
-      .then(()=> {
-        this.setState(this.defaultState({status: STATUS_SUCCESS}))
+      .then((response)=> {
+        this.setState(this.defaultState({
+          createdPoll: response.data,
+          status: STATUS_SUCCESS,
+        }))
         this.refTitle.focus()
       }, ()=> {
         this.setState({status: STATUS_FAIL})
