@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router'
 import {times} from 'lodash'
 import {post} from '../helpers.js'
 
 const STATUS_IDLE = ''
 const STATUS_CREATING = 'Creating...' 
 const STATUS_SUCCESS = 'Your poll was created successfully'
-const STATUS_URL = 'View it at'
+const STATUS_URL = 'VIEW YOUR NEW POLL!'
 const STATUS_FAIL = 'We failed to create your poll :(' 
 
 class CreatePoll extends Component{
@@ -25,10 +26,6 @@ class CreatePoll extends Component{
     document.title = 'Create Poll'
   }
   render(){
-    let pollUrl = ''
-    if(this.state.createdPoll !== null) {
-      pollUrl = `${process.env.APP_BASE_URL}poll/${this.state.createdPoll.id}`
-    }
     return(
       <div>
         <h1>Create new poll</h1>
@@ -54,9 +51,8 @@ class CreatePoll extends Component{
             <p>
               {this.state.status}
               <br />
-              {this.state.status === STATUS_SUCCESS && `${STATUS_URL} ` }
               {this.state.status === STATUS_SUCCESS && 
-                <a href={pollUrl}>{pollUrl}</a>
+                <Link to={`/poll/${this.state.createdPoll.id}`}>{STATUS_URL}</Link>
               }
             </p>
         </form>

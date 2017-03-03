@@ -6,7 +6,7 @@ const STATUS_VOTING = 'Voting...'
 const STATUS_SUCCESS = 'We\'ve received your vote!'
 const STATUS_FAIL = 'We couldn\'t receive your vote for some reason :('
 
-class Poll extends Component{
+class VotePoll extends Component{
 
   state = {
     poll: {},
@@ -86,8 +86,8 @@ class Poll extends Component{
   }
 }
 
-Poll.propTypes = {
+VotePoll.propTypes = {
   params: React.PropTypes.object,
 }
 
-export default Poll
+export default VotePoll
