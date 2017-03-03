@@ -19,6 +19,9 @@ class CreatePoll extends Component{
     }
     return Object.assign({}, defaultState, override)
   }
+  componentWillMount() {
+    document.title = 'Create Poll'
+  }
   render(){
     return(
       <div>
