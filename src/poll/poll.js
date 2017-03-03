@@ -1,10 +1,17 @@
 import React, {Component} from 'react'
-import {get} from '../helpers.js'
+import {get, post} from '../helpers.js'
+
+const STATUS_IDLE = ''
+const STATUS_VOTING = 'Voting...'
+const STATUS_SUCCESS = 'We\'ve received your vote!'
+const STATUS_FAIL = 'We couldn\'t receive your vote for some reason :('
 
 class Poll extends Component{
 
   state = {
     poll: {},
+    selected: null,
+    status: STATUS_IDLE,
   }
 
   componentWillMount() {
@@ -18,7 +25,7 @@ class Poll extends Component{
     if(!this.state.poll.choices) return null
     return(
       <div>
-        <form>
+        <form onSubmit={(e)=> this.handleSubmit(e)}>
           <h1>{this.state.poll.title}</h1>
           {this.state.poll.choices.map((choice, i)=> {
             return (
@@ -27,16 +34,55 @@ class Poll extends Component{
                   name="choice"
                   type="radio" 
                   id={choice.id} 
-                  value={choice.id} 
+                  value={choice.id}
+                  onClick={(e)=> this.handleChange(e.target.checked, choice.id)} 
                 /> 
                 <label htmlFor={choice.id}>{choice.label}</label>
               </p>
             )
           })}
-          <input type="submit" value="Vote" />
+          <input 
+            type="submit" 
+            value="Vote" 
+            disabled={this.disableVoting()}
+          />
+          <p>{this.state.status}</p>
         </form>
       </div>
     )
+  }
+  handleSubmit(e){
+    e.preventDefault()
+    if(!this.state.selected) return
+    this.setState({
+      status: STATUS_VOTING,
+    })
+    const payload = {
+      choice_id: this.state.selected,
+    }
+    post(`poll/${this.state.poll.id}/vote`, payload).then(()=> {
+      this.setState({
+        status: STATUS_SUCCESS,
+      })      
+    }, ()=> {
+      this.setState({
+        status: STATUS_FAIL,
+      })
+    })
+  }
+  handleChange(selected, choiceId) {    
+    if(selected) this.setState({
+      status: STATUS_IDLE,
+      selected: choiceId,
+    })
+  }
+  disableVoting() {
+    return this.state.status === STATUS_VOTING || this.state.selected === null 
+  }
+  getSelectedChoice(){
+    const input = document.querySelector('input[name="choice"]:checked')
+    if(!input) return null
+    return input.value
   }
 }
 
