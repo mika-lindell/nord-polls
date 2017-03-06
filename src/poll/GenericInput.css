@@ -1,0 +1,6 @@
+.required:invalid + span::after{
+  content: 'Required';
+  color: red;
+  margin-left: 0.5rem;
+
+}

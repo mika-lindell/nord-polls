@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {Link, browserHistory} from 'react-router'
 import {times} from 'lodash'
 import {post} from '../helpers.js'
+import GenericInput from './GenericInput'
+import css from './GenericInput.css'
 
 const STATUS_IDLE = ''
 const STATUS_CREATING = 'Creating...' 
@@ -16,6 +18,7 @@ class CreatePoll extends Component{
     createdPoll: null,
     status: STATUS_IDLE,
   }
+
   componentWillMount() {
     document.title = 'Create Poll'
   }
@@ -24,20 +27,20 @@ class CreatePoll extends Component{
       <div>
         <h1>Create new poll</h1>
         <form onSubmit={(e)=> this.handleSubmit(e)}>
-          <label htmlFor="title">
-            Title
-          </label>
-          <input 
+          <GenericInput 
+            label="Title"
+            className={css.required}
             autoFocus
             required 
+            maxLength="150"
             id="title" 
             type="text"
             value={this.state.title} 
-            onChange={(e)=> this.handleChange(e, e.target.id)}
-            ref={(input)=> this.refTitle = input}
+            handleChange={(e)=> this.handleChange(e, e.target.id)}
           />
-          <label>Choices</label>
+          <h3>Choices</h3>
           {this.renderChoiceInputs()}
+          <br />
           <input 
             type="submit" 
             value="Create Poll" 
@@ -96,13 +99,17 @@ class CreatePoll extends Component{
     }
     let result = times(this.state.choices.length, (n)=> {
       const id = `choice-${n}`
-      return (  
-        <input 
-          type="text" 
-          key={n} 
-          id={id} 
-          value={this.state.choices[n]} 
-          onChange={(e)=> this.handleChange(e, id)} 
+      return (
+        <GenericInput
+            label={`Choice ${n+1}`}
+            type="text" 
+            maxLength="150"
+            required={n < 2}
+            className={n < 2 && css.required}
+            key={n} 
+            id={id} 
+            value={this.state.choices[n]} 
+            handleChange={(e)=> this.handleChange(e, id)} 
         />
       )
     })
