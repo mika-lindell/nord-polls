@@ -10,11 +10,20 @@ body {
   margin: 1rem;
 }
 
-input{
+input[type="text"]{
   display: block; 
-  max-width: 300px;
+  max-width: 500px;
+  width: 100%;
   margin: 0.5rem 0;
 }
 label{
   display: block;
+}
+input[type="radio"] + label{
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+dd{
+  -webkit-margin-start: 0;
 }

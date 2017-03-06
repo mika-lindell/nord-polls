@@ -29,7 +29,7 @@ export async function get(api) {
  */
 export async function post(api, payload) {
   try {
-    const response = await fetch(`${process.env.API_URL}w${api}`, {method: 'POST', mode: 'cors', body: JSON.stringify(payload)})
+    const response = await fetch(`${process.env.API_URL}${api}`, {method: 'POST', mode: 'cors', body: JSON.stringify(payload)})
     if(response.status === 404) {
       throw new Error('No connection to API')
     }

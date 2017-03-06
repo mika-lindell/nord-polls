@@ -45,6 +45,7 @@ export default createConfig({
       ...readDotenv(context),
       ['process.env.NODE_ENV']: 'production',
       ['process.env.API_URL']: 'http://localhost:1337/',
+      ['process.env.APP_BASE_URL']: 'http://0.0.0.0:8080/',
     }, (v) => JSON.stringify(v))),
     new HtmlWebpackPlugin({
       inject: 'body',

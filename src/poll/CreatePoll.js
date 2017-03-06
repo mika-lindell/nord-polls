@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Link, browserHistory} from 'react-router'
 import {times} from 'lodash'
 import {post} from '../helpers.js'
 
@@ -7,17 +8,16 @@ const STATUS_CREATING = 'Creating...'
 const STATUS_SUCCESS = 'Your poll was created successfully'
 const STATUS_FAIL = 'We failed to create your poll :(' 
 
-class Poll extends Component{
+class CreatePoll extends Component{
 
-  state = this.defaultState()
-
-  defaultState(override={}) {
-    const defaultState = {
-      title: '',
-      choices: ['', '', '', ''],
-      status: STATUS_IDLE,
-    }
-    return Object.assign({}, defaultState, override)
+  state = {
+    title: '',
+    choices: ['', '', '', ''],
+    createdPoll: null,
+    status: STATUS_IDLE,
+  }
+  componentWillMount() {
+    document.title = 'Create Poll'
   }
   render(){
     return(
@@ -42,7 +42,13 @@ class Poll extends Component{
             type="submit" 
             value="Create Poll" 
             disabled={this.disableSubmit()} />
-            <span>{this.state.status}</span>
+            <p>
+              {this.state.status}
+              <br />
+              {this.state.status === STATUS_SUCCESS && 
+                <Link to={`/poll/${this.state.createdPoll.id}/vote`}>View Poll</Link>
+              }
+            </p>
         </form>
       </div>
     )
@@ -51,6 +57,7 @@ class Poll extends Component{
     if(id === 'title'){
       this.setState({
         status: '',
+        createdPoll: null,
         title: e.target.value,
       })
       return
@@ -73,11 +80,10 @@ class Poll extends Component{
       title: this.state.title,
       choices: this.state.choices.filter((val)=>val ? true : false), 
     }
-    post('poll/', payload)
+    post('poll', payload)
       .then((response)=> {
-        this.setState(this.defaultState({status: STATUS_SUCCESS}))
-        this.refTitle.focus()
-      }, (err)=> {
+        browserHistory.push(`/poll/${response.data.id}/vote`)  
+      }, ()=> {
         this.setState({status: STATUS_FAIL})
       })
   }
@@ -86,7 +92,7 @@ class Poll extends Component{
   }
   renderChoiceInputs(){
     if(!this.state) {
-      return result
+      return 
     }
     let result = times(this.state.choices.length, (n)=> {
       const id = `choice-${n}`
@@ -104,5 +110,5 @@ class Poll extends Component{
   }
 }
 
-export default Poll
+export default CreatePoll
 

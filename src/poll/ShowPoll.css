@@ -1,0 +1,49 @@
+.chart{
+  position: relative;
+  margin: 2rem 0;
+}
+
+.chartTitle{
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.chartLabel, .chartBar{
+  height: 3rem;
+  line-height: 3rem;
+}
+
+.chartLabel{
+  min-width: 10rem;
+  text-align: right;
+  display: inline-block;
+  margin-right: 0.5rem; 
+}
+
+.chartBar{
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+}
+
+.chartBarColor{
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  background-color: #4CAF50;
+  height: 2.5rem;
+  z-index: 1;
+}
+
+.chartBarSegments{
+  position: absolute;
+  left: 0;
+  background: repeating-linear-gradient(to right, #ddd, #ddd 1px, #fff 1px, #fff 10%);
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.totalVotes{
+  font-size: 1.5rem;
+}
