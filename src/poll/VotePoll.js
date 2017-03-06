@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router'
+import {Link, browserHistory} from 'react-router'
 import {get, post} from '../helpers.js'
 
 const STATUS_IDLE = ''
@@ -65,7 +65,8 @@ class VotePoll extends Component{
     post(`poll/${this.state.poll.id}/vote`, payload).then(()=> {
       this.setState({
         status: STATUS_SUCCESS,
-      })      
+      })
+      browserHistory.push(`poll/${this.state.poll.id}/results`)      
     }, ()=> {
       this.setState({
         status: STATUS_FAIL,
