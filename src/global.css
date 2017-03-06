@@ -12,7 +12,8 @@ body {
 
 input[type="text"]{
   display: block; 
-  max-width: 300px;
+  max-width: 500px;
+  width: 100%;
   margin: 0.5rem 0;
 }
 label{
