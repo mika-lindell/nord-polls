@@ -5,14 +5,23 @@ class GenericInput extends Component{
 
   state = {
     charsLeft: this.props.maxLength || 0,
+    hasFocus: false,
   }
 
   render(){
     return(
       <span>
-        <label htmlFor={this.props.id}>{this.props.label} ({this.state.charsLeft})</label>
+        <label htmlFor={this.props.id}>
+        {this.props.label} 
+        &nbsp;
+        {this.state.hasFocus &&
+          `(${this.state.charsLeft})`
+        }
+        </label>
         <input 
-          onChange={(e)=>this.handleChange(e)} 
+          onChange={(e)=>this.handleChange(e)}
+          onFocus={()=>this.handleFocus()} 
+          onBlur={()=>this.handleBlur()} 
           {...this.filterProps(this.props)} 
         />
         <span></span>
@@ -28,6 +37,18 @@ class GenericInput extends Component{
     if(this.props.handleChange) {
       this.props.handleChange(e)
     }
+  }
+
+  handleFocus(){
+    this.setState({
+      hasFocus: true,
+    })
+  }
+
+  handleBlur(){
+    this.setState({
+      hasFocus: false,
+    })
   }
 
   filterProps(props){
