@@ -32,7 +32,7 @@ class CreatePoll extends Component{
             className={css.required}
             autoFocus
             required 
-            maxLength="150"
+            maxLength="70"
             id="title" 
             type="text"
             value={this.state.title} 
@@ -103,7 +103,7 @@ class CreatePoll extends Component{
         <GenericInput
             label={`Choice ${n+1}`}
             type="text" 
-            maxLength="150"
+            maxLength="70"
             required={n < 2}
             className={n < 2 && css.required}
             key={n} 
