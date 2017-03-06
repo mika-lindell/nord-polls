@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router'
+import {Link, browserHistory} from 'react-router'
 import {times} from 'lodash'
 import {post} from '../helpers.js'
 
@@ -10,16 +10,11 @@ const STATUS_FAIL = 'We failed to create your poll :('
 
 class CreatePoll extends Component{
 
-  state = this.defaultState()
-
-  defaultState(override={}) {
-    const defaultState = {
-      title: '',
-      choices: ['', '', '', ''],
-      createdPoll: null,
-      status: STATUS_IDLE,
-    }
-    return Object.assign({}, defaultState, override)
+  state = {
+    title: '',
+    choices: ['', '', '', ''],
+    createdPoll: null,
+    status: STATUS_IDLE,
   }
   componentWillMount() {
     document.title = 'Create Poll'
@@ -85,13 +80,9 @@ class CreatePoll extends Component{
       title: this.state.title,
       choices: this.state.choices.filter((val)=>val ? true : false), 
     }
-    post('poll/', payload)
+    post('poll', payload)
       .then((response)=> {
-        this.setState(this.defaultState({
-          createdPoll: response.data,
-          status: STATUS_SUCCESS,
-        }))
-        this.refTitle.focus()
+        browserHistory.push(`/poll/${response.data.id}/vote`)  
       }, ()=> {
         this.setState({status: STATUS_FAIL})
       })

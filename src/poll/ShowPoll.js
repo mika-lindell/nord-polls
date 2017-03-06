@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {find} from 'lodash'
 import {get} from '../helpers.js'
+import Loader from './Loader'
 
 import css from './ShowPoll.css'
 
@@ -21,7 +22,9 @@ class ShowPoll extends Component{
 
   }
   render() {
-    if(!this.state.poll.id) return null
+    if(!this.state.poll.id){
+      return <Loader />
+    }
     return(
       <div>
         <dl className={css.chart}>

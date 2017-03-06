@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 import {Link, browserHistory} from 'react-router'
 import {get, post} from '../helpers.js'
+import Loader from './Loader'
 
 const STATUS_IDLE = ''
 const STATUS_VOTING = 'Voting...'
-const STATUS_SUCCESS = 'We\'ve received your vote!'
-const STATUS_FAIL = 'We couldn\'t receive your vote for some reason :('
+const STATUS_SUCCESS = `We\'ve received your vote!`
+const STATUS_FAIL = `We couldn\'t receive your vote for some reason :(`
 
 class VotePoll extends Component{
 
@@ -24,7 +25,9 @@ class VotePoll extends Component{
     })
   }
   render() {
-    if(!this.state.poll.choices) return null
+    if(!this.state.poll.choices) {
+      return <Loader />
+    } 
     return(
       <div>
         <form onSubmit={(e)=> this.handleSubmit(e)}>
@@ -67,7 +70,7 @@ class VotePoll extends Component{
       this.setState({
         status: STATUS_SUCCESS,
       })
-      browserHistory.push(`poll/${this.state.poll.id}/results`)      
+      browserHistory.push(`/poll/${this.state.poll.id}/results`)      
     }, ()=> {
       this.setState({
         status: STATUS_FAIL,
