@@ -22,3 +22,7 @@ input[type="radio"] + label{
   display: inline-block;
   margin-left: 1rem;
 }
+
+dd{
+  -webkit-margin-start: 0;
+}

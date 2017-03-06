@@ -3,6 +3,8 @@ import {Link} from 'react-router'
 import {find} from 'lodash'
 import {get} from '../helpers.js'
 
+import css from './ShowPoll.css'
+
 class ShowPoll extends Component{
   state = {
     poll: {},
@@ -21,19 +23,31 @@ class ShowPoll extends Component{
     if(!this.state.poll.id) return null
     return(
       <div>
-        <dl>
-          <dt>{this.state.poll.title}</dt>
+        <dl className={css.chart}>
+          <dt className={css.chartTitle}>{this.state.poll.title}</dt>
           {
             this.state.poll.choices.map((choice, i)=> {
+              const percentage = Math.round(this.getVotes(choice) / this.state.totalVotes * 100)
               return (
                 <dd key={i}>
-                {choice.label}: {Math.round(this.getVotes(choice) / this.state.totalVotes * 100)}%
+                  <span className={css.chartLabel}>
+                    {choice.label}: {percentage}%
+                  </span>
+                  <span className={css.chartBar}>
+                    <span 
+                      className={css.chartBarColor}
+                      style={{width: `${percentage}%`}}
+                    >
+                    </span>
+                    <span className={css.chartBarSegments}>
+                    </span>
+                  </span>
                 </dd>
               )
             })
           }
         </dl>
-        <p>
+        <p className={css.totalVotes}>
         Total votes: {this.state.totalVotes}
         </p>
         <Link to={`/poll/${this.state.poll.id}/vote`}>Cast a new vote</Link>
