@@ -35,13 +35,13 @@ class ShowPoll extends Component{
           {
             this.state.poll.choices.map((choice, i)=> {
               const votes = this.getVotes(choice)
-              const percentage = Math.round(votes / this.state.totalVotes * 100)
+              const percentage = Math.round(votes / this.state.totalVotes * 100) || 0
               return (
-                <dd key={i}>
-                  <span className={css.chartLabel}>
+                <dd key={i} className={css.chartCell}>
+                  <div className={css.chartLabel}>
                     {choice.label}: {percentage}%
-                  </span>
-                  <span className={css.chartBar}>
+                  </div>
+                  <div className={css.chartBar}>
                     <span 
                       className={css.chartBarColor}
                       style={{width: `${percentage}%`}}
@@ -49,7 +49,7 @@ class ShowPoll extends Component{
                     </span>
                     <span className={css.chartBarSegments}>
                     </span>
-                  </span>
+                  </div>
                 </dd>
               )
             })
@@ -71,6 +71,7 @@ class ShowPoll extends Component{
     const total = votes.map((record)=> {
       return record.votes
     })
+    if(total.length === 0) return 0
     return total.reduce((a, b)=>a+b)
   }
 }
