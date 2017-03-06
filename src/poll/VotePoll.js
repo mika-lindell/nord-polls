@@ -14,18 +14,21 @@ class VotePoll extends Component{
     poll: {},
     selected: null,
     status: STATUS_IDLE,
+    isLoading: false,
   }
 
   componentWillMount() {
+    this.setState({isLoading: true})
     get(`poll/${this.props.params.id}`).then((response)=> {
       document.title = `${response.data.title} – Vote`
       this.setState({
         poll: Object.assign({}, response.data),
+        isLoading: false,
       })
     })
   }
   render() {
-    if(!this.state.poll.choices) {
+    if(this.state.isLoading) {
       return <Loader />
     } 
     return(

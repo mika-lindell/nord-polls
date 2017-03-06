@@ -10,19 +10,22 @@ class ShowPoll extends Component{
   state = {
     poll: {},
     totalVotes: 0,
+    isLoading: false,
   }
   componentWillMount() {
+    this.setState({isLoading: true})
     get(`poll/${this.props.params.id}/results`).then((response)=> {
       document.title = `${response.data.title} – Results`
       this.setState({
         poll: Object.assign({}, response.data),
         totalVotes: this.getVotesTotal(response.data.votes),
+        isLoading: false,
       })
     })
 
   }
   render() {
-    if(!this.state.poll.id){
+    if(this.state.isLoading){
       return <Loader />
     }
     return(
