@@ -17,6 +17,7 @@ class VotePoll extends Component{
 
   componentWillMount() {
     get(`poll/${this.props.params.id}`).then((response)=> {
+      document.title = `${response.data.title} – Vote`
       this.setState({
         poll: Object.assign({}, response.data),
       })

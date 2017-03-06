@@ -12,6 +12,7 @@ class ShowPoll extends Component{
   }
   componentWillMount() {
     get(`poll/${this.props.params.id}/results`).then((response)=> {
+      document.title = `${response.data.title} – Results`
       this.setState({
         poll: Object.assign({}, response.data),
         totalVotes: this.getVotesTotal(response.data.votes),
@@ -27,7 +28,8 @@ class ShowPoll extends Component{
           <dt className={css.chartTitle}>{this.state.poll.title}</dt>
           {
             this.state.poll.choices.map((choice, i)=> {
-              const percentage = Math.round(this.getVotes(choice) / this.state.totalVotes * 100)
+              const votes = this.getVotes(choice)
+              const percentage = Math.round(votes / this.state.totalVotes * 100)
               return (
                 <dd key={i}>
                   <span className={css.chartLabel}>
