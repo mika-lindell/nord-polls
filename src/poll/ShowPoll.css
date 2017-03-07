@@ -1,6 +1,9 @@
 .chart{
   position: relative;
   margin: 2rem 0;
+  width: 100%;
+  max-width: 700px;
+  position: relative;
 }
 
 .chartTitle{
@@ -8,22 +11,29 @@
   margin-bottom: 2rem;
 }
 
+.chartCell{
+  display: flex;
+}
+
 .chartLabel, .chartBar{
   height: 3rem;
   line-height: 3rem;
+  position: relative;
 }
 
 .chartLabel{
-  min-width: 10rem;
   text-align: right;
   display: inline-block;
   margin-right: 0.5rem; 
+  flex-grow:1;
+  flex-basis: 10rem;
 }
 
 .chartBar{
   display: inline-block;
-  position: absolute;
   width: 100%;
+  flex-grow:1;
+  flex-basis: auto;
 }
 
 .chartBarColor{

@@ -10,12 +10,12 @@ import fetch from 'isomorphic-fetch'
 export async function get(api) {
   try {
     const response = await fetch(`${process.env.API_URL}${api}`, {method: 'GET', mode: 'cors'})
-    if(response.status === 404) {
-      throw new Error('No connection to API')
+    if(response.status.toString().substring(0, 2) !== '20') {
+      throw new Error('Failed to fetch the data')
     }    
     return await response.json()
   } catch(err) {
-    return new Promise()
+    throw new Error('No connection to API')
   }
 }
 
@@ -30,12 +30,12 @@ export async function get(api) {
 export async function post(api, payload) {
   try {
     const response = await fetch(`${process.env.API_URL}${api}`, {method: 'POST', mode: 'cors', body: JSON.stringify(payload)})
-    if(response.status === 404) {
-      throw new Error('No connection to API')
+    if(response.status.toString().substring(0, 2) !== '20') {
+      throw new Error('Failed to fetch the data')
     }
     return await response.json()
   } catch(err) {
-    return new Promise()
+    throw new Error('No connection to API')
   }
   
 }

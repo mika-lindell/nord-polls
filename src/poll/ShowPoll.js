@@ -3,6 +3,7 @@ import {Link} from 'react-router'
 import {find} from 'lodash'
 import {get} from '../helpers.js'
 import Loader from './Loader'
+import ErrorNoResponse from './ErrorNoResponse'
 
 import css from './ShowPoll.css'
 
@@ -11,6 +12,7 @@ class ShowPoll extends Component{
     poll: {},
     totalVotes: 0,
     isLoading: false,
+    isError: false,
   }
   componentWillMount() {
     this.setState({isLoading: true})
@@ -21,6 +23,11 @@ class ShowPoll extends Component{
         totalVotes: this.getVotesTotal(response.data.votes),
         isLoading: false,
       })
+    }, ()=> {
+      this.setState({
+        isLoading: false,
+        isError: true,
+      })
     })
 
   }
@@ -28,20 +35,23 @@ class ShowPoll extends Component{
     if(this.state.isLoading){
       return <Loader />
     }
+    if(this.state.isError){
+      return <ErrorNoResponse />
+    }
     return(
-      <div>
+      <main>
         <dl className={css.chart}>
           <dt className={css.chartTitle}>{this.state.poll.title}</dt>
           {
             this.state.poll.choices.map((choice, i)=> {
               const votes = this.getVotes(choice)
-              const percentage = Math.round(votes / this.state.totalVotes * 100)
+              const percentage = Math.round(votes / this.state.totalVotes * 100) || 0
               return (
-                <dd key={i}>
-                  <span className={css.chartLabel}>
+                <dd key={i} className={css.chartCell}>
+                  <div className={css.chartLabel}>
                     {choice.label}: {percentage}%
-                  </span>
-                  <span className={css.chartBar}>
+                  </div>
+                  <div className={css.chartBar}>
                     <span 
                       className={css.chartBarColor}
                       style={{width: `${percentage}%`}}
@@ -49,7 +59,7 @@ class ShowPoll extends Component{
                     </span>
                     <span className={css.chartBarSegments}>
                     </span>
-                  </span>
+                  </div>
                 </dd>
               )
             })
@@ -59,7 +69,7 @@ class ShowPoll extends Component{
         Total votes: {this.state.totalVotes}
         </p>
         <Link to={`/poll/${this.state.poll.id}/vote`}>Cast a new vote</Link>
-      </div>
+      </main>
     )
   }
   getVotes(choice) {
@@ -71,6 +81,7 @@ class ShowPoll extends Component{
     const total = votes.map((record)=> {
       return record.votes
     })
+    if(total.length === 0) return 0
     return total.reduce((a, b)=>a+b)
   }
 }
