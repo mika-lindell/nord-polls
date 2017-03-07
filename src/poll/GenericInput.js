@@ -1,10 +1,15 @@
 import React, {Component} from 'react'
 import {pickBy} from 'lodash'
 
+import css from './GenericInput.css'
+
 class GenericInput extends Component{
 
+  static defaultProps = {
+    maxLength: 0,
+  }
+
   state = {
-    charsLeft: this.props.maxLength || 0,
     hasFocus: false,
   }
 
@@ -14,11 +19,13 @@ class GenericInput extends Component{
         <label htmlFor={this.props.id}>
         {this.props.label} 
         &nbsp;
-        {this.state.hasFocus &&
-          `(${this.state.charsLeft})`
+        {this.state.hasFocus  && this.props.maxLength > 0 &&
+          `(${this.props.maxLength - this.input.value.length})`
         }
         </label>
         <input 
+          className={`${css.required} ${this.props.className}`}
+          ref={(input) => this.input = input}
           onChange={(e)=>this.handleChange(e)}
           onFocus={()=>this.handleFocus()} 
           onBlur={()=>this.handleBlur()} 
@@ -30,10 +37,6 @@ class GenericInput extends Component{
   }
 
   handleChange(e){
-    const input = e.target
-    this.setState({
-      charsLeft: input.maxLength - input.value.length,
-    })
     if(this.props.handleChange) {
       this.props.handleChange(e)
     }
@@ -53,7 +56,7 @@ class GenericInput extends Component{
 
   filterProps(props){
     return pickBy(props, (value, key)=>{
-      if(key === 'handleChange' || key === 'label') {
+      if(key === 'handleChange' || key === 'label' || key === 'className') {
         return false
       }
       return true
@@ -65,6 +68,7 @@ class GenericInput extends Component{
 GenericInput.propTypes = {
   id: React.PropTypes.string,
   label: React.PropTypes.string,
+  className: React.PropTypes.string,
   maxLength: React.PropTypes.string,
   handleChange: React.PropTypes.func,
 }

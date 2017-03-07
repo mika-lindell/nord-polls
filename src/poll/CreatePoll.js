@@ -3,7 +3,6 @@ import {Link, browserHistory} from 'react-router'
 import {times} from 'lodash'
 import {post} from '../helpers.js'
 import GenericInput from './GenericInput'
-import css from './GenericInput.css'
 
 const STATUS_IDLE = ''
 const STATUS_CREATING = 'Creating...' 
@@ -24,12 +23,11 @@ class CreatePoll extends Component{
   }
   render(){
     return(
-      <div>
+      <main>
         <h1>Create new poll</h1>
         <form onSubmit={(e)=> this.handleSubmit(e)}>
           <GenericInput 
             label="Title"
-            className={css.required}
             autoFocus
             required 
             maxLength="70"
@@ -53,7 +51,7 @@ class CreatePoll extends Component{
               }
             </p>
         </form>
-      </div>
+      </main>
     )
   }
   handleChange(e, id){
@@ -105,7 +103,6 @@ class CreatePoll extends Component{
             type="text" 
             maxLength="70"
             required={n < 2}
-            className={n < 2 && css.required}
             key={n} 
             id={id} 
             value={this.state.choices[n]} 

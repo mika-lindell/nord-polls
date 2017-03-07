@@ -6,11 +6,16 @@ html {
 
 body {
   display: flex;
+      width: 100%;
   min-height: 100%;
   margin: 1rem;
 }
 
-input[type="text"]{
+main{
+      width: 100%;
+}
+
+input[type="text"] {
   max-width: 400px;
   width: 100%;
   margin: 0.5rem 0;
@@ -18,7 +23,7 @@ input[type="text"]{
   border: 1px solid grey;
 }
 
-input:focus{
+input:focus {
   outline-offset: 1px;
 }
 
@@ -26,23 +31,20 @@ input:invalid {
   border: 1px solid red;
 }
 
-label{
+label {
   display: block;
 }
-input[type="radio"] + label{
+
+input[type="radio"] + label {
   display: inline-block;
   margin-left: 1rem;
 }
 
-input[type="submit"]{
+input[type="submit"] {
   padding: 0.5rem;
   text-transform: uppercase;
 }
 
 dd{
   -webkit-margin-start: 0;
-}
-
-[data-reactroot]{
-  width: 100%;
 }

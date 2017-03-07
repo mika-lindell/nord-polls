@@ -39,7 +39,7 @@ class ShowPoll extends Component{
       return <ErrorNoResponse />
     }
     return(
-      <div>
+      <main>
         <dl className={css.chart}>
           <dt className={css.chartTitle}>{this.state.poll.title}</dt>
           {
@@ -69,7 +69,7 @@ class ShowPoll extends Component{
         Total votes: {this.state.totalVotes}
         </p>
         <Link to={`/poll/${this.state.poll.id}/vote`}>Cast a new vote</Link>
-      </div>
+      </main>
     )
   }
   getVotes(choice) {

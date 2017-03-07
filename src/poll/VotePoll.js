@@ -44,7 +44,7 @@ class VotePoll extends Component{
       return <ErrorNoResponse />
     }
     return(
-      <div>
+      <main>
         <form onSubmit={(e)=> this.handleSubmit(e)}>
           <h1>{this.state.poll.title}</h1>
           {this.state.poll.choices.map((choice, i)=> {
@@ -69,7 +69,7 @@ class VotePoll extends Component{
           <p>{this.state.status}</p>
           <Link to={`/poll/${this.state.poll.id}/results`}>View results</Link>
         </form>
-      </div>
+      </main>
     )
   }
   handleSubmit(e){
