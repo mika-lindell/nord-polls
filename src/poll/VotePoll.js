@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link, browserHistory} from 'react-router'
 import {get, post} from '../helpers.js'
 import Loader from './Loader'
+import ErrorNoResponse from './ErrorNoResponse'
 
 const STATUS_IDLE = ''
 const STATUS_VOTING = 'Voting...'
@@ -15,15 +16,23 @@ class VotePoll extends Component{
     selected: null,
     status: STATUS_IDLE,
     isLoading: false,
+    isError: false,
   }
 
   componentWillMount() {
-    this.setState({isLoading: true})
+    this.setState({
+      isLoading: true,
+    })
     get(`poll/${this.props.params.id}`).then((response)=> {
       document.title = `${response.data.title} – Vote`
       this.setState({
         poll: Object.assign({}, response.data),
         isLoading: false,
+      })
+    }, ()=> {
+      this.setState({
+        isLoading: false,
+        isError: true,
       })
     })
   }
@@ -31,6 +40,9 @@ class VotePoll extends Component{
     if(this.state.isLoading) {
       return <Loader />
     } 
+    if(this.state.isError){
+      return <ErrorNoResponse />
+    }
     return(
       <div>
         <form onSubmit={(e)=> this.handleSubmit(e)}>

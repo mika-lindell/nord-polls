@@ -3,6 +3,7 @@ import {Link} from 'react-router'
 import {find} from 'lodash'
 import {get} from '../helpers.js'
 import Loader from './Loader'
+import ErrorNoResponse from './ErrorNoResponse'
 
 import css from './ShowPoll.css'
 
@@ -11,6 +12,7 @@ class ShowPoll extends Component{
     poll: {},
     totalVotes: 0,
     isLoading: false,
+    isError: false,
   }
   componentWillMount() {
     this.setState({isLoading: true})
@@ -21,12 +23,20 @@ class ShowPoll extends Component{
         totalVotes: this.getVotesTotal(response.data.votes),
         isLoading: false,
       })
+    }, ()=> {
+      this.setState({
+        isLoading: false,
+        isError: true,
+      })
     })
 
   }
   render() {
     if(this.state.isLoading){
       return <Loader />
+    }
+    if(this.state.isError){
+      return <ErrorNoResponse />
     }
     return(
       <div>

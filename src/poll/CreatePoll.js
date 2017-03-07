@@ -14,7 +14,7 @@ class CreatePoll extends Component{
 
   state = {
     title: '',
-    choices: ['', '', '', ''],
+    choices: ['', '', '', '', ''],
     createdPoll: null,
     status: STATUS_IDLE,
   }
@@ -81,7 +81,7 @@ class CreatePoll extends Component{
     this.setState({status: STATUS_CREATING})
     const payload = {
       title: this.state.title,
-      choices: this.state.choices.filter((val)=>val ? true : false), 
+      choices: this.state.choices.filter((val)=>val.replace(/\s+/g, '') ? true : false), 
     }
     post('poll', payload)
       .then((response)=> {
